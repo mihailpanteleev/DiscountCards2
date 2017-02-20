@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -24,11 +25,17 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
     private SimpleCursorAdapter namesAdapter, lastNamesAdapter, birthDatesAdapter, personsAdapter;
     private LoaderManager loaderManager;
     private ListView personsListView;
+    private String nameFilter, lastNameFilter, birthDayFilter;
 
     final int NAMES_CURSOR_LOADER = 0;
     final int LAST_NAMES_CURSOR_LOADER = 1;
     final int BIRTHDATES_CURSOR_LOADER = 2;
     final int PERSON_DATA_CURSOR_LOADER = 3;
+
+    private NamesCursorLoader namesCursorLoader;
+    private LastNamesCursorLoader lastNamesCursorLoader;
+    private BirthdaysCursorLoader birthdaysCursorLoader;
+    private PersonDataCursorLoader personDataCursorLoader;
 
 
     @Override
@@ -59,6 +66,46 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
     }
 */
 
+    public void onClickFilter(View view){
+        if (filterByName.isChecked()){
+            Object o = names.getSelectedItem();
+            if (o instanceof Cursor) {
+                Cursor cursor = (Cursor)o;
+                int columnIndex = cursor.getColumnIndex(MyDb.COL_NAME);
+                nameFilter = cursor.getString(columnIndex);
+            }
+        } else {
+            nameFilter = null;
+        }
+        if (filterByLastName.isChecked()){
+            Object o = lastNames.getSelectedItem();
+            if (o instanceof Cursor) {
+                Cursor cursor = (Cursor)o;
+                int columnIndex = cursor.getColumnIndex(MyDb.COL_LAST_NAME);
+                lastNameFilter = cursor.getString(columnIndex);
+            }
+        } else {
+            lastNameFilter = null;
+        }
+        if (filterByBirth.isChecked()){
+            Object o = birthDates.getSelectedItem();
+            if (o instanceof Cursor) {
+                Cursor cursor = (Cursor)o;
+                int columnIndex = cursor.getColumnIndex(MyDb.COL_BIRTH_DATE);
+                birthDayFilter = cursor.getString(columnIndex);
+            }
+        } else {
+            birthDayFilter = null;
+        }
+        namesCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        namesCursorLoader.forceLoad();
+        lastNamesCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        lastNamesCursorLoader.forceLoad();
+        birthdaysCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        birthdaysCursorLoader.forceLoad();
+        personDataCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        personDataCursorLoader.forceLoad();
+    }
     public void onClickAddPerson(View view){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View v = getLayoutInflater().inflate(R.layout.dialog_add_person, null);
@@ -77,6 +124,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
                     loaderManager.getLoader(NAMES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(LAST_NAMES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(BIRTHDATES_CURSOR_LOADER).forceLoad();
+                    loaderManager.getLoader(PERSON_DATA_CURSOR_LOADER).forceLoad();
                 }
             }
         });
@@ -110,13 +158,17 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id){
             case NAMES_CURSOR_LOADER:
-                return new NamesCursorLoader(this, myDb);
+                namesCursorLoader = new NamesCursorLoader(this, myDb);
+                return namesCursorLoader;
             case LAST_NAMES_CURSOR_LOADER:
-                return new LastNamesCursorLoader(this, myDb);
+                lastNamesCursorLoader = new LastNamesCursorLoader(this, myDb);
+                return lastNamesCursorLoader;
             case BIRTHDATES_CURSOR_LOADER:
-                return new BirthdaysCursorLoader(this, myDb);
+                birthdaysCursorLoader = new BirthdaysCursorLoader(this, myDb);
+                return birthdaysCursorLoader;
             case PERSON_DATA_CURSOR_LOADER:
-                return new PersonDataCursorLoader(this, myDb);
+                personDataCursorLoader = new PersonDataCursorLoader(this, myDb);
+                return personDataCursorLoader;
             default:
                 return null;
         }
@@ -148,50 +200,82 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
 
     static class NamesCursorLoader extends CursorLoader {
         MyDb db;
-        public NamesCursorLoader(Context context, MyDb _db) {
+        String nameFilter, lastNameFilter, birthDateFilter;
+
+        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
+            this.birthDateFilter = birthDateFilter;
+            this.lastNameFilter = lastNameFilter;
+            this.nameFilter = nameFilter;
+        }
+
+        NamesCursorLoader(Context context, MyDb _db) {
             super(context);
             db = _db;
         }
 
         @Override
         public Cursor loadInBackground() {
-            return db.getNames();
+            return db.getNames(lastNameFilter, birthDateFilter);
         }
     }
     static class LastNamesCursorLoader extends CursorLoader {
         MyDb db;
-        public LastNamesCursorLoader(Context context, MyDb _db) {
+        String nameFilter, lastNameFilter, birthDateFilter;
+
+        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
+            this.birthDateFilter = birthDateFilter;
+            this.lastNameFilter = lastNameFilter;
+            this.nameFilter = nameFilter;
+        }
+
+        LastNamesCursorLoader(Context context, MyDb _db) {
             super(context);
             db = _db;
         }
 
         @Override
         public Cursor loadInBackground() {
-            return db.getLastNames();
+            return db.getLastNames(nameFilter, birthDateFilter);
         }
     }
     static class BirthdaysCursorLoader extends CursorLoader {
         MyDb db;
-        public BirthdaysCursorLoader(Context context, MyDb _db) {
+        String nameFilter, lastNameFilter, birthDateFilter;
+
+        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
+            this.birthDateFilter = birthDateFilter;
+            this.lastNameFilter = lastNameFilter;
+            this.nameFilter = nameFilter;
+        }
+
+        BirthdaysCursorLoader(Context context, MyDb _db) {
             super(context);
             db = _db;
         }
 
         @Override
         public Cursor loadInBackground() {
-            return db.getBirthDates();
+            return db.getBirthDates(nameFilter, lastNameFilter);
         }
     }
     static class PersonDataCursorLoader extends CursorLoader {
         MyDb db;
-        public PersonDataCursorLoader(Context context, MyDb _db) {
+        String nameFilter, lastNameFilter, birthDateFilter;
+
+        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
+            this.birthDateFilter = birthDateFilter;
+            this.lastNameFilter = lastNameFilter;
+            this.nameFilter = nameFilter;
+        }
+
+        PersonDataCursorLoader(Context context, MyDb _db) {
             super(context);
             db = _db;
         }
 
         @Override
         public Cursor loadInBackground() {
-            return db.getPersonData();
+            return db.getPersonData(nameFilter, lastNameFilter, birthDateFilter);
         }
     }
 }
