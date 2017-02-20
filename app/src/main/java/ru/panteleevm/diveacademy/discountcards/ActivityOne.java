@@ -3,15 +3,12 @@ package ru.panteleevm.diveacademy.discountcards;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,7 +26,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
 
     final int NAMES_CURSOR_LOADER = 0;
     final int LAST_NAMES_CURSOR_LOADER = 1;
-    final int BIRTHDATES_CURSOR_LOADER = 2;
+    final int BIRTH_DATES_CURSOR_LOADER = 2;
     final int PERSON_DATA_CURSOR_LOADER = 3;
 
     private NamesCursorLoader namesCursorLoader;
@@ -123,7 +120,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
                     myDb.addPerson(name, lastName, birthYear);
                     loaderManager.getLoader(NAMES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(LAST_NAMES_CURSOR_LOADER).forceLoad();
-                    loaderManager.getLoader(BIRTHDATES_CURSOR_LOADER).forceLoad();
+                    loaderManager.getLoader(BIRTH_DATES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(PERSON_DATA_CURSOR_LOADER).forceLoad();
                 }
             }
@@ -150,7 +147,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
 
         loaderManager.initLoader(NAMES_CURSOR_LOADER, null, this);
         loaderManager.initLoader(LAST_NAMES_CURSOR_LOADER, null, this);
-        loaderManager.initLoader(BIRTHDATES_CURSOR_LOADER, null, this);
+        loaderManager.initLoader(BIRTH_DATES_CURSOR_LOADER, null, this);
         loaderManager.initLoader(PERSON_DATA_CURSOR_LOADER, null, this);
     }
 
@@ -163,7 +160,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
             case LAST_NAMES_CURSOR_LOADER:
                 lastNamesCursorLoader = new LastNamesCursorLoader(this, myDb);
                 return lastNamesCursorLoader;
-            case BIRTHDATES_CURSOR_LOADER:
+            case BIRTH_DATES_CURSOR_LOADER:
                 birthdaysCursorLoader = new BirthdaysCursorLoader(this, myDb);
                 return birthdaysCursorLoader;
             case PERSON_DATA_CURSOR_LOADER:
@@ -183,7 +180,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
                 case LAST_NAMES_CURSOR_LOADER:
                     lastNamesAdapter.swapCursor(data);
                     break;
-                case BIRTHDATES_CURSOR_LOADER:
+                case BIRTH_DATES_CURSOR_LOADER:
                     birthDatesAdapter.swapCursor(data);
                     break;
                 case PERSON_DATA_CURSOR_LOADER:
@@ -198,81 +195,38 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
 
     }
 
-    static class NamesCursorLoader extends CursorLoader {
-        MyDb db;
-        String nameFilter, lastNameFilter, birthDateFilter;
-
-        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
-            this.birthDateFilter = birthDateFilter;
-            this.lastNameFilter = lastNameFilter;
-            this.nameFilter = nameFilter;
-        }
-
+    static class NamesCursorLoader extends OneCursorLoader {
         NamesCursorLoader(Context context, MyDb _db) {
-            super(context);
-            db = _db;
+            super(context, _db);
         }
-
         @Override
         public Cursor loadInBackground() {
             return db.getNames(lastNameFilter, birthDateFilter);
         }
     }
-    static class LastNamesCursorLoader extends CursorLoader {
-        MyDb db;
-        String nameFilter, lastNameFilter, birthDateFilter;
-
-        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
-            this.birthDateFilter = birthDateFilter;
-            this.lastNameFilter = lastNameFilter;
-            this.nameFilter = nameFilter;
-        }
-
+    static class LastNamesCursorLoader extends OneCursorLoader {
         LastNamesCursorLoader(Context context, MyDb _db) {
-            super(context);
-            db = _db;
+            super(context, _db);
         }
-
         @Override
         public Cursor loadInBackground() {
             return db.getLastNames(nameFilter, birthDateFilter);
         }
     }
-    static class BirthdaysCursorLoader extends CursorLoader {
-        MyDb db;
-        String nameFilter, lastNameFilter, birthDateFilter;
-
-        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
-            this.birthDateFilter = birthDateFilter;
-            this.lastNameFilter = lastNameFilter;
-            this.nameFilter = nameFilter;
-        }
-
+    static class BirthdaysCursorLoader extends OneCursorLoader {
         BirthdaysCursorLoader(Context context, MyDb _db) {
-            super(context);
+            super(context, _db);
             db = _db;
         }
-
         @Override
         public Cursor loadInBackground() {
             return db.getBirthDates(nameFilter, lastNameFilter);
         }
     }
-    static class PersonDataCursorLoader extends CursorLoader {
-        MyDb db;
-        String nameFilter, lastNameFilter, birthDateFilter;
-
-        void setFilters(String nameFilter, String lastNameFilter, String birthDateFilter){
-            this.birthDateFilter = birthDateFilter;
-            this.lastNameFilter = lastNameFilter;
-            this.nameFilter = nameFilter;
-        }
-
+    static class PersonDataCursorLoader extends OneCursorLoader {
         PersonDataCursorLoader(Context context, MyDb _db) {
-            super(context);
-            db = _db;
+            super(context, _db);
         }
-
         @Override
         public Cursor loadInBackground() {
             return db.getPersonData(nameFilter, lastNameFilter, birthDateFilter);
