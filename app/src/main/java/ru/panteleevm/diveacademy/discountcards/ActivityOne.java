@@ -94,13 +94,10 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         } else {
             birthDayFilter = null;
         }
-        namesCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        OneCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
         namesCursorLoader.forceLoad();
-        lastNamesCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
         lastNamesCursorLoader.forceLoad();
-        birthdaysCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
         birthdaysCursorLoader.forceLoad();
-        personDataCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
         personDataCursorLoader.forceLoad();
     }
     public void onClickAddPerson(View view){
@@ -201,7 +198,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getNames(lastNameFilter, birthDateFilter);
+            return db.getFilteredNames(lastNameFilter, birthDateFilter);
         }
     }
     static class LastNamesCursorLoader extends OneCursorLoader {
@@ -210,7 +207,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getLastNames(nameFilter, birthDateFilter);
+            return db.getFilteredLastNames(nameFilter, birthDateFilter);
         }
     }
     static class BirthdaysCursorLoader extends OneCursorLoader {
@@ -220,7 +217,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getBirthDates(nameFilter, lastNameFilter);
+            return db.getFilteredBirthDates(nameFilter, lastNameFilter);
         }
     }
     static class PersonDataCursorLoader extends OneCursorLoader {
@@ -229,7 +226,7 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getPersonData(nameFilter, lastNameFilter, birthDateFilter);
+            return db.getFilteredPersonData(nameFilter, lastNameFilter, birthDateFilter);
         }
     }
 }

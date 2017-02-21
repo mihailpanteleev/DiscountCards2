@@ -35,7 +35,7 @@ class MyDb {
         values.put(COL_BIRTH_DATE, birthDate);
         return db.insert(TBL_PERSON, null, values);
     }
-    Cursor getNames(String lastName, String birthDate){
+    Cursor getFilteredNames(String lastName, String birthDate){
         if ((lastName!=null)&&(birthDate!=null)&&(!lastName.isEmpty())&&(!birthDate.isEmpty()))
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_NAME}, COL_LAST_NAME+"=? AND "+COL_BIRTH_DATE+"=?", new String[]{lastName,birthDate}, COL_NAME, null, null, null);
         if ((lastName!=null)&&(!lastName.isEmpty()))
@@ -44,7 +44,7 @@ class MyDb {
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_NAME}, COL_BIRTH_DATE+"=?", new String[]{birthDate}, COL_NAME, null, null, null);
         return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_NAME}, null, null, COL_NAME, null, null, null);
     }
-    Cursor getLastNames(String name, String birthDate){
+    Cursor getFilteredLastNames(String name, String birthDate){
         if ((name!=null)&&(birthDate!=null)&&(!name.isEmpty())&&(!birthDate.isEmpty()))
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_LAST_NAME}, COL_NAME+"=? AND "+COL_BIRTH_DATE+"=?", new String[]{name,birthDate}, COL_LAST_NAME, null, null, null);
         if ((name!=null)&&(!name.isEmpty()))
@@ -53,7 +53,7 @@ class MyDb {
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_LAST_NAME}, COL_BIRTH_DATE+"=?", new String[]{birthDate}, COL_LAST_NAME, null, null, null);
         return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_LAST_NAME}, null, null, COL_LAST_NAME, null, null, null);
     }
-    Cursor getBirthDates(String name, String lastName){
+    Cursor getFilteredBirthDates(String name, String lastName){
         if ((name!=null)&&(lastName!=null)&&(!name.isEmpty())&&(!lastName.isEmpty()))
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_BIRTH_DATE}, COL_NAME+"=? AND "+COL_LAST_NAME+"=?", new String[]{name,lastName}, COL_BIRTH_DATE, null, null, null);
         if ((name!=null)&&(!name.isEmpty()))
@@ -62,7 +62,7 @@ class MyDb {
             return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_BIRTH_DATE}, COL_LAST_NAME+"=?", new String[]{lastName}, COL_BIRTH_DATE, null, null, null);
         return db.query(false, TBL_PERSON, new String[]{COL_ID, COL_BIRTH_DATE}, null, null, COL_BIRTH_DATE, null, null, null);
     }
-    Cursor getPersonData(String name, String lastName, String birthDate){
+    Cursor getFilteredPersonData(String name, String lastName, String birthDate){
         String select = "SELECT "+COL_ID+", printf(\"%s %s, %s\", "+COL_NAME+", "+COL_LAST_NAME+", "+COL_BIRTH_DATE+") as "+ALIAS_DATA+" FROM "+TBL_PERSON;
         if ((name!=null)&&(lastName!=null)&&(birthDate!=null)&&(!name.isEmpty())&&(!lastName.isEmpty())&&(!birthDate.isEmpty())){
             String _select = select+" WHERE "+COL_NAME+"=? AND "+COL_LAST_NAME+"=? AND "+COL_BIRTH_DATE+"=?";
