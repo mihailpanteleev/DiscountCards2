@@ -1,6 +1,5 @@
 package ru.panteleevm.diveacademy.discountcards;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +7,9 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,7 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
-public class ActivityOne extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ActivityOne extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private MyDb myDb;
     private CheckBox filterByName, filterByLastName, filterByBirth;
     private Spinner names, lastNames, birthDates;
@@ -55,13 +57,48 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         personsListView = (ListView)findViewById(R.id.lv_persons);
     }
 
-/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_one, menu);
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
-*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_add_person:
+                addPersonDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void addPersonDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_add_person, null);
+        builder.setView(v);
+        final EditText editName = (EditText)v.findViewById(R.id.et_name);
+        final EditText editLastName = (EditText)v.findViewById(R.id.et_last_name);
+        final EditText editBirthYear = (EditText)v.findViewById(R.id.et_birth);
+        builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = editName.getText().toString();
+                String lastName = editLastName.getText().toString();
+                String birthYear = editBirthYear.getText().toString();
+                if (!name.isEmpty()&&!lastName.isEmpty()&&!birthYear.isEmpty()){
+                    myDb.addPerson(name, lastName, birthYear);
+                    loaderManager.getLoader(NAMES_CURSOR_LOADER).forceLoad();
+                    loaderManager.getLoader(LAST_NAMES_CURSOR_LOADER).forceLoad();
+                    loaderManager.getLoader(BIRTH_DATES_CURSOR_LOADER).forceLoad();
+                    loaderManager.getLoader(PERSON_DATA_CURSOR_LOADER).forceLoad();
+                }
+            }
+        });
+        builder.create();
+        builder.show();
+    }
 
     public void onClickFilter(View view){
         if (filterByName.isChecked()){
@@ -99,31 +136,6 @@ public class ActivityOne extends Activity implements LoaderManager.LoaderCallbac
         lastNamesCursorLoader.forceLoad();
         birthdaysCursorLoader.forceLoad();
         personDataCursorLoader.forceLoad();
-    }
-    public void onClickAddPerson(View view){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View v = getLayoutInflater().inflate(R.layout.dialog_add_person, null);
-        builder.setView(v);
-        final EditText editName = (EditText)v.findViewById(R.id.et_name);
-        final EditText editLastName = (EditText)v.findViewById(R.id.et_last_name);
-        final EditText editBirthYear = (EditText)v.findViewById(R.id.et_birth);
-        builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String name = editName.getText().toString();
-                String lastName = editLastName.getText().toString();
-                String birthYear = editBirthYear.getText().toString();
-                if (!name.isEmpty()&&!lastName.isEmpty()&&!birthYear.isEmpty()){
-                    myDb.addPerson(name, lastName, birthYear);
-                    loaderManager.getLoader(NAMES_CURSOR_LOADER).forceLoad();
-                    loaderManager.getLoader(LAST_NAMES_CURSOR_LOADER).forceLoad();
-                    loaderManager.getLoader(BIRTH_DATES_CURSOR_LOADER).forceLoad();
-                    loaderManager.getLoader(PERSON_DATA_CURSOR_LOADER).forceLoad();
-                }
-            }
-        });
-        builder.create();
-        builder.show();
     }
 
     private void fillSpinners() {

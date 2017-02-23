@@ -10,15 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ru.panteleevm.diveacademy.discountcards.ActivityOne">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cb_filter_by_name"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onClickFilter"/>
@@ -62,20 +57,10 @@
         android:layout_toRightOf="@+id/cb_filter_by_birth"
         android:layout_toEndOf="@+id/cb_filter_by_birth" />
 
-    <Button
-        android:text="@string/menu_item_add_person"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sp_birth_date"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/button_add_person"
-        android:onClick="onClickAddPerson"
-        />
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button_add_person"
+        android:layout_below="@+id/cb_filter_by_birth"
         android:layout_centerHorizontal="true"
         android:id="@+id/lv_persons"/>
 
