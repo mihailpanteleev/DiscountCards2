@@ -12,20 +12,33 @@ import android.database.sqlite.SQLiteDatabase;
 
 class MyDb {
     private SQLiteDatabase db;
-//    private Context context;
-
+// названия таблиц
     static final String TBL_PERSON = "person";
-
+    static final String TBL_CARD = "card";
+    static final String TBL_CARD_LEVEL = "cardLevel";
+    static final String TBL_BUY = "buy";
+// названия колонок
     static final String COL_ID = "_id";
     static final String COL_NAME = "name";
     static final String COL_LAST_NAME = "lastName";
     static final String COL_BIRTH_DATE = "birth";
+    static final String COL_DISCOUNT = "discount";
+    static final String COL_FROM_SUM = "fromSum";
+    static final String COL_TO_SUM = "toSum";
+    static final String COL_PREFIX = "prefix";
+    static final String COL_SERIAL = " serial";
+    static final String COL_PERSON_ID = " personId";
+    static final String COL_LEVEL_ID = " levelId";
+    static final String COL_AMOUNT = " amount";
+    static final String COL_PRICE = " price";
+    static final String COL_SUM = " sum";
+// алиасы
     static final String ALIAS_DATA = "data";
+
 
     MyDb(Context context) {
         MyDbHelper dbHelper = new MyDbHelper(context);
         db = dbHelper.getWritableDatabase();
-//        this.context = context;
     }
 
     long addPerson(String name, String lastName, String birthDate){
