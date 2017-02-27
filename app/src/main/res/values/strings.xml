@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">DiscountCards</string>
     <string name="menu_item_add_person">Add person</string>
-    <string name="button_ok">Ok</string>
+    <string name="button_ok">OK</string>
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
     <string name="birth_date">Year of birth</string>
+    <string name="title_activity_find">Find</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>
