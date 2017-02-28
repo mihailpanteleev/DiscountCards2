@@ -18,22 +18,18 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class ActivityOne extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private MyDb myDb;
-    private CheckBox filterByName, filterByLastName, filterByBirth;
-    private Spinner names, lastNames, birthDates;
-    private SimpleCursorAdapter namesAdapter, lastNamesAdapter, birthDatesAdapter, personsAdapter;
-    private LoaderManager loaderManager;
-    private ListView personsListView;
-    private String nameFilter, lastNameFilter, birthDayFilter;
-
     final int NAMES_CURSOR_LOADER = 0;
     final int LAST_NAMES_CURSOR_LOADER = 1;
-    final int BIRTH_DATES_CURSOR_LOADER = 2;
-    final int PERSON_DATA_CURSOR_LOADER = 3;
-
+    final int PERSON_DATA_CURSOR_LOADER = 2;
+    private MyDb myDb;
+    private CheckBox filterByName, filterByLastName;
+    private Spinner names, lastNames;
+    private SimpleCursorAdapter namesAdapter, lastNamesAdapter, personsAdapter;
+    private LoaderManager loaderManager;
+    private ListView personsListView;
+    private String nameFilter, lastNameFilter;
     private NamesCursorLoader namesCursorLoader;
     private LastNamesCursorLoader lastNamesCursorLoader;
-    private BirthdaysCursorLoader birthdaysCursorLoader;
     private PersonDataCursorLoader personDataCursorLoader;
 
 
@@ -50,10 +46,8 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
     private void initViews() {
         filterByName = (CheckBox)findViewById(R.id.cb_filter_by_name);
         filterByLastName = (CheckBox)findViewById(R.id.cb_filter_by_last_name);
-        filterByBirth = (CheckBox)findViewById(R.id.cb_filter_by_birth);
         names = (Spinner)findViewById(R.id.sp_name);
         lastNames = (Spinner)findViewById(R.id.sp_last_name);
-        birthDates = (Spinner)findViewById(R.id.sp_birth_date);
         personsListView = (ListView)findViewById(R.id.lv_persons);
     }
 
@@ -91,7 +85,6 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
                     myDb.addPerson(name, lastName, birthYear);
                     loaderManager.getLoader(NAMES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(LAST_NAMES_CURSOR_LOADER).forceLoad();
-                    loaderManager.getLoader(BIRTH_DATES_CURSOR_LOADER).forceLoad();
                     loaderManager.getLoader(PERSON_DATA_CURSOR_LOADER).forceLoad();
                 }
             }
@@ -121,20 +114,9 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         } else {
             lastNameFilter = null;
         }
-        if (filterByBirth.isChecked()){
-            Object o = birthDates.getSelectedItem();
-            if (o instanceof Cursor) {
-                Cursor cursor = (Cursor)o;
-                int columnIndex = cursor.getColumnIndex(MyDb.COL_BIRTH_DATE);
-                birthDayFilter = cursor.getString(columnIndex);
-            }
-        } else {
-            birthDayFilter = null;
-        }
-        OneCursorLoader.setFilters(nameFilter, lastNameFilter, birthDayFilter);
+        OneCursorLoader.setFilters(nameFilter, lastNameFilter);
         namesCursorLoader.forceLoad();
         lastNamesCursorLoader.forceLoad();
-        birthdaysCursorLoader.forceLoad();
         personDataCursorLoader.forceLoad();
     }
 
@@ -148,15 +130,11 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         lastNamesAdapter = new SimpleCursorAdapter(this, R.layout.text_item, null, new String[]{MyDb.COL_LAST_NAME}, toTextView, 0);
         lastNames.setAdapter(lastNamesAdapter);
 
-        birthDatesAdapter = new SimpleCursorAdapter(this, R.layout.text_item, null, new String[]{MyDb.COL_BIRTH_DATE}, toTextView, 0);
-        birthDates.setAdapter(birthDatesAdapter);
-
         personsAdapter = new SimpleCursorAdapter(this, R.layout.text_item, null, new String[]{MyDb.ALIAS_DATA}, toTextView, 0);
         personsListView.setAdapter(personsAdapter);
 
         loaderManager.initLoader(NAMES_CURSOR_LOADER, null, this);
         loaderManager.initLoader(LAST_NAMES_CURSOR_LOADER, null, this);
-        loaderManager.initLoader(BIRTH_DATES_CURSOR_LOADER, null, this);
         loaderManager.initLoader(PERSON_DATA_CURSOR_LOADER, null, this);
     }
 
@@ -169,9 +147,6 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
             case LAST_NAMES_CURSOR_LOADER:
                 lastNamesCursorLoader = new LastNamesCursorLoader(this, myDb);
                 return lastNamesCursorLoader;
-            case BIRTH_DATES_CURSOR_LOADER:
-                birthdaysCursorLoader = new BirthdaysCursorLoader(this, myDb);
-                return birthdaysCursorLoader;
             case PERSON_DATA_CURSOR_LOADER:
                 personDataCursorLoader = new PersonDataCursorLoader(this, myDb);
                 return personDataCursorLoader;
@@ -188,9 +163,6 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
                     break;
                 case LAST_NAMES_CURSOR_LOADER:
                     lastNamesAdapter.swapCursor(data);
-                    break;
-                case BIRTH_DATES_CURSOR_LOADER:
-                    birthDatesAdapter.swapCursor(data);
                     break;
                 case PERSON_DATA_CURSOR_LOADER:
                     personsAdapter.swapCursor(data);
@@ -210,7 +182,7 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getFilteredNames(lastNameFilter, birthDateFilter);
+            return db.getFilteredNames(lastNameFilter);
         }
     }
     static class LastNamesCursorLoader extends OneCursorLoader {
@@ -219,17 +191,7 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getFilteredLastNames(nameFilter, birthDateFilter);
-        }
-    }
-    static class BirthdaysCursorLoader extends OneCursorLoader {
-        BirthdaysCursorLoader(Context context, MyDb _db) {
-            super(context, _db);
-            db = _db;
-        }
-        @Override
-        public Cursor loadInBackground() {
-            return db.getFilteredBirthDates(nameFilter, lastNameFilter);
+            return db.getFilteredLastNames(nameFilter);
         }
     }
     static class PersonDataCursorLoader extends OneCursorLoader {
@@ -238,7 +200,7 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         }
         @Override
         public Cursor loadInBackground() {
-            return db.getFilteredPersonData(nameFilter, lastNameFilter, birthDateFilter);
+            return db.getFilteredPersonData(nameFilter, lastNameFilter);
         }
     }
 }
