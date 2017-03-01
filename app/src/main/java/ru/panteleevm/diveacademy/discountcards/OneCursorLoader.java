@@ -11,17 +11,16 @@ import android.content.CursorLoader;
  */
 
 class OneCursorLoader extends CursorLoader {
+    static String nameFilter, lastNameFilter;
     MyDb db;
-    static String nameFilter, lastNameFilter, birthDateFilter;
-
-    static void setFilters(String name, String lastName, String birthDate){
-        birthDateFilter = birthDate;
-        lastNameFilter = lastName;
-        nameFilter = name;
-    }
 
     OneCursorLoader(Context context, MyDb _db) {
         super(context);
         db = _db;
+    }
+
+    static void setFilters(String name, String lastName) {
+        lastNameFilter = lastName;
+        nameFilter = name;
     }
 }
