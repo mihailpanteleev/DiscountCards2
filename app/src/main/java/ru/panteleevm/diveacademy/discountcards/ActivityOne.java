@@ -3,6 +3,7 @@ package ru.panteleevm.diveacademy.discountcards;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,6 +20,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
 public class ActivityOne extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    final static String EXTRA_PERSON_ID = "ru.panteleevm.diveacademy.discountcards.personId";
     final int NAMES_CURSOR_LOADER = 0;
     final int LAST_NAMES_CURSOR_LOADER = 1;
     final int PERSON_DATA_CURSOR_LOADER = 2;
@@ -41,6 +44,18 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         loaderManager = getLoaderManager();
         initViews();
         fillSpinners();
+        setListeners();
+    }
+
+    private void setListeners() {
+        personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ActivityOne.this, ActivityDiverActions.class);
+                intent.putExtra(EXTRA_PERSON_ID, id);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews() {
@@ -173,7 +188,18 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        switch (loader.getId()){
+            case NAMES_CURSOR_LOADER:
+                namesAdapter.swapCursor(null);
+                break;
+            case LAST_NAMES_CURSOR_LOADER:
+                lastNamesAdapter.swapCursor(null);
+                break;
+            case PERSON_DATA_CURSOR_LOADER:
+                personsAdapter.swapCursor(null);
+                break;
+            default:
+        }
     }
 
     static class NamesCursorLoader extends OneCursorLoader {

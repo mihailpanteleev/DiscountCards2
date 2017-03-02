@@ -45,7 +45,17 @@
         android:id="@+id/lv_persons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/cb_filter_by_last_name"
+        android:layout_below="@+id/label_lv_persons"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="Clients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sp_last_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:id="@+id/label_lv_persons" />
 
 </RelativeLayout>

@@ -15,6 +15,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActivityDiverActions"
+            android:label="@string/title_activity_diver_actions"
+            android:parentActivityName=".ActivityOne"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.panteleevm.diveacademy.discountcards.ActivityOne" />
+        </activity>
     </application>
 
 </manifest>

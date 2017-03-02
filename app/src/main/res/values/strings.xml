@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">DiscountCards</string>
     <string name="menu_item_add_person">Add person</string>
-    <string name="button_ok">Ok</string>
+    <string name="button_ok">OK</string>
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
     <string name="birth_date">Year of birth</string>
+    <string name="title_activity_diver_actions">ActivityDiverActions</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
