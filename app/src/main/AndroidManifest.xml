@@ -24,6 +24,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ru.panteleevm.diveacademy.discountcards.ActivityOne" />
         </activity>
+        <activity
+            android:name=".ActivityBuy"
+            android:label="@string/title_activity_buy"
+            android:parentActivityName=".ActivityDiverActions"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ru.panteleevm.diveacademy.discountcards.ActivityDiverActions" />
+        </activity>
     </application>
 
 </manifest>

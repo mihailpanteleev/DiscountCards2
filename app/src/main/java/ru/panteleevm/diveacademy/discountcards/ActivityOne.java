@@ -90,6 +90,7 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
         final EditText editName = (EditText)v.findViewById(R.id.et_name);
         final EditText editLastName = (EditText)v.findViewById(R.id.et_last_name);
         final EditText editBirthYear = (EditText)v.findViewById(R.id.et_birth);
+        builder.setNegativeButton(R.string.button_cancel, null);
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -104,8 +105,7 @@ public class ActivityOne extends AppCompatActivity implements LoaderManager.Load
                 }
             }
         });
-        builder.create();
-        builder.show();
+        builder.create().show();
     }
 
     public void onClickFilter(View view){

@@ -1,6 +1,7 @@
 package ru.panteleevm.diveacademy.discountcards;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,18 +15,22 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 
 public class ActivityDiverActions extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
-    final String NO_CARD = "No card";
+    final static String EXTRA_DISCOUNT_VALUE = "ru.panteleevm.diveacademy.discountcards.discount_value";
+
     private MyDb myDb;
     private long personId;
     private long cardId;
@@ -77,8 +82,20 @@ public class ActivityDiverActions extends AppCompatActivity
         Intent intent = getIntent();
         personId = intent.getLongExtra(ActivityOne.EXTRA_PERSON_ID, -1);
         personData.setText(myDb.getPersonStringById(personId));
-        Cursor cursor;
-        cursor = myDb.getCardDataByPersonId(personId);
+        fillCardData();
+        sum.setText(myDb.getGrandTotal(personId));
+
+        String[] from = new String[]{MyDb.COL_NAME, MyDb.COL_PRICE, MyDb.COL_AMOUNT, MyDb.COL_SUM};
+        int[] to = new int[]{R.id.name, R.id.price, R.id.amount, R.id.sum};
+        purchaseAdapter = new SimpleCursorAdapter(this,R.layout.purchase_list_item, null, from, to, 0);
+        purchaseList.setAdapter(purchaseAdapter);
+
+        loaderManager = getSupportLoaderManager();
+        loaderManager.initLoader(0, null, this);
+    }
+
+    private void fillCardData() {
+        Cursor cursor = myDb.getCardDataByPersonId(personId);
         if (cursor.moveToFirst()){
             int idIdx = cursor.getColumnIndex(MyDb.COL_ID);
             int serialIdx = cursor.getColumnIndex(MyDb.COL_SERIAL);
@@ -94,19 +111,10 @@ public class ActivityDiverActions extends AppCompatActivity
             discount.setText(cursor.getString(discountIdx));
             discount_ = cursor.getInt(discountIdx);
         } else {
-            cardSerial.setText(NO_CARD);
-            discount.setText(NO_CARD);
+            cardSerial.setText(R.string.no_card);
+            discount.setText(R.string.no_card);
         }
         cursor.close();
-        sum.setText(myDb.getGrandTotal(personId));
-
-        String[] from = new String[]{MyDb.COL_NAME, MyDb.COL_PRICE, MyDb.COL_AMOUNT, MyDb.COL_SUM};
-        int[] to = new int[]{R.id.name, R.id.price, R.id.amount, R.id.sum};
-        purchaseAdapter = new SimpleCursorAdapter(this,R.layout.purchase_list_item, null, from, to, 0);
-        purchaseList.setAdapter(purchaseAdapter);
-
-        loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(0, null, this);
     }
 
     private void initViews() {
@@ -149,29 +157,56 @@ public class ActivityDiverActions extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+//    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_buy) {
+            buy();
+        } else if (id == R.id.nav_edit_card) {
+            editCard();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void buy() {
+        Intent intent = new Intent(this, ActivityBuy.class);
+        intent.putExtra(ActivityOne.EXTRA_PERSON_ID, personId);
+        intent.putExtra(EXTRA_DISCOUNT_VALUE, discount_);
+        startActivity(intent);
+    }
+
+    private void editCard() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_edit_card, null);
+        builder.setView(v);
+        final EditText etSerial = (EditText)v.findViewById(R.id.et_serial);
+        final RadioButton rbGold = (RadioButton)v.findViewById(R.id.rb_gold);
+        final RadioButton rbSilver = (RadioButton)v.findViewById(R.id.rb_silver);
+        final RadioButton rbYellow = (RadioButton)v.findViewById(R.id.rb_yellow);
+        builder.setNegativeButton(R.string.button_cancel, null);
+        builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String serial = etSerial.getText().toString();
+                int level = 0;
+                if (rbYellow.isChecked()) level = 1;
+                else if (rbSilver.isChecked()) level = 2;
+                else if (rbGold.isChecked()) level = 3;
+                if (!serial.isEmpty() && level!=0){
+                    long id = myDb.addCard(serial, personId, level);
+                    if (id!=-1){
+                        fillCardData();
+                    }
+                }
+            }
+        });
+        builder.create().show();
     }
 
     @Override

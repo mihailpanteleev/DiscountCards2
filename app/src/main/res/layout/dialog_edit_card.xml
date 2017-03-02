@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/et_serial"
+        android:hint="Discount card serial number " />
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RadioButton
+            android:text="Gold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_gold"
+            android:layout_weight="1"
+            android:checked="false" />
+
+        <RadioButton
+            android:text="Yellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_yellow"
+            android:layout_weight="1"
+            android:checked="false" />
+
+        <RadioButton
+            android:text="Silver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rb_silver"
+            android:layout_weight="1"
+            android:checked="false" />
+
+    </RadioGroup>
+</LinearLayout>

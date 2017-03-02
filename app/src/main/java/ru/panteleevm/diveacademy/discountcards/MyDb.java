@@ -31,6 +31,7 @@ class MyDb {
     static final String COL_AMOUNT = "amount";
     static final String COL_PRICE = "price";
     static final String COL_SUM = "sum";
+    static final String COL_DATE = "date";
 // алиасы
     static final String ALIAS_DATA = "data";
     private SQLiteDatabase db;
@@ -105,7 +106,23 @@ class MyDb {
         return sum;
     }
     Cursor getPurchaseListById(long personId){
-//        SELECT _id, name, price, amount, sum FROM buy WHERE personId=1
-        return db.query(false, TBL_BUY, new String[]{COL_ID, COL_NAME, COL_PRICE, COL_AMOUNT, COL_SUM}, COL_PERSON_ID+"=?", new String[]{Long.toString(personId)}, null, null, null, null);
+        return db.query(false, TBL_BUY, new String[]{COL_ID, COL_NAME, COL_PRICE, COL_AMOUNT, COL_SUM}, COL_PERSON_ID+"=?", new String[]{Long.toString(personId)}, null, null, COL_DATE, null);
+    }
+    long addBuy(long personId, String name, int amount, int price, int sum, String date){
+        ContentValues values = new ContentValues();
+        values.put(COL_PERSON_ID, personId);
+        values.put(COL_NAME, name);
+        values.put(COL_AMOUNT, amount);
+        values.put(COL_PRICE, price);
+        values.put(COL_SUM, sum);
+        values.put(COL_DATE, date);
+        return db.insert(TBL_BUY, null, values);
+    }
+    long addCard(String serial, long personId, int levelId){
+        ContentValues values = new ContentValues();
+        values.put(COL_SERIAL, serial);
+        values.put(COL_PERSON_ID, personId);
+        values.put(COL_LEVEL_ID, levelId);
+        return db.insert(TBL_CARD, null, values);
     }
 }
