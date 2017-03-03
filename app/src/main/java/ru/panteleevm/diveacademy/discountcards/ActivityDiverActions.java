@@ -46,7 +46,6 @@ public class ActivityDiverActions extends AppCompatActivity
     private TextView sum;
     private ListView purchaseList;
     private SimpleCursorAdapter purchaseAdapter;
-    private LoaderManager loaderManager;
     private PurchaseCursorLoader purchaseCursorLoader;
 
     @Override
@@ -84,15 +83,18 @@ public class ActivityDiverActions extends AppCompatActivity
         personId = intent.getLongExtra(ActivityOne.EXTRA_PERSON_ID, -1);
         personData.setText(myDb.getPersonStringById(personId));
         fillCardData();
-        sum.setText(myDb.getGrandTotal(personId));
+        fillGrandTotal();
 
         String[] from = new String[]{MyDb.COL_NAME, MyDb.COL_PRICE, MyDb.COL_AMOUNT, MyDb.COL_SUM};
         int[] to = new int[]{R.id.name, R.id.price, R.id.amount, R.id.sum};
         purchaseAdapter = new SimpleCursorAdapter(this,R.layout.purchase_list_item, null, from, to, 0);
         purchaseList.setAdapter(purchaseAdapter);
 
-        loaderManager = getSupportLoaderManager();
-        loaderManager.initLoader(0, null, this);
+        getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    private void fillGrandTotal() {
+        sum.setText(myDb.getGrandTotal(personId));
     }
 
     private void fillCardData() {
@@ -176,11 +178,19 @@ public class ActivityDiverActions extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            purchaseCursorLoader.forceLoad();
+            fillGrandTotal();
+        }
+    }
+
     private void buy() {
         Intent intent = new Intent(this, ActivityBuy.class);
         intent.putExtra(ActivityOne.EXTRA_PERSON_ID, personId);
         intent.putExtra(EXTRA_DISCOUNT_VALUE, discount_);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     private void editCard() {

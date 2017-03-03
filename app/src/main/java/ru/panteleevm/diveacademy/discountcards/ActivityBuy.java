@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ActivityBuy extends AppCompatActivity {
+//    final static String EXTRA_BUY_RESULT = "ru.panteleevm.diveacademy.discountcards.EXTRA_BUY_RESULT";
     private MyDb myDb;
     private long personId;
     private int discountValue;
@@ -77,8 +78,8 @@ public class ActivityBuy extends AppCompatActivity {
                     quantity = 0;
 
                 if (price!=0 && quantity != 0) {
-                    Float newPrice = (float) price * quantity * (100-discountValue)/100;
-                    discounted.setText(String.format("%1$.2f",newPrice));
+                    int newPrice =  price * quantity * (100-discountValue)/100;
+                    discounted.setText(String.valueOf(newPrice));
                 }
             }
         };
@@ -120,7 +121,10 @@ public class ActivityBuy extends AppCompatActivity {
         String dateString = format.format(new Date());
 
         if (!name.isEmpty() && price!=0 && quantity!=0){
-            myDb.addBuy(personId, name, quantity, price, price*quantity, dateString);
+            int newPrice =  price * quantity * (100-discountValue)/100;
+            Boolean result = -1 != myDb.addBuy(personId, name, quantity, price, newPrice, dateString);
+            Intent intent = new Intent();
+            setResult(result ? RESULT_OK : RESULT_CANCELED, intent);
             finish();
         }
     }
