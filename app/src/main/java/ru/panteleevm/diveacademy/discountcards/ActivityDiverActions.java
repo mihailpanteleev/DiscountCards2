@@ -85,6 +85,9 @@ public class ActivityDiverActions extends AppCompatActivity
         fillCardData();
         fillGrandTotal();
 
+        View headerPurchaseList = getLayoutInflater().inflate(R.layout.header_purchase_list, null);
+        purchaseList.addHeaderView(headerPurchaseList, null, false);
+
         String[] from = new String[]{MyDb.COL_NAME, MyDb.COL_PRICE, MyDb.COL_AMOUNT, MyDb.COL_SUM};
         int[] to = new int[]{R.id.name, R.id.price, R.id.amount, R.id.sum};
         purchaseAdapter = new SimpleCursorAdapter(this,R.layout.purchase_list_item, null, from, to, 0);
