@@ -125,4 +125,12 @@ class MyDb {
         values.put(COL_LEVEL_ID, levelId);
         return db.insert(TBL_CARD, null, values);
     }
+
+    boolean updateCard(String serial, int levelId, long id) {
+        ContentValues values = new ContentValues();
+        values.put(COL_SERIAL, serial);
+        values.put(COL_LEVEL_ID, levelId);
+
+        return db.update(TBL_CARD, values, COL_ID + "=?", new String[]{String.valueOf(id)}) == 1;
+    }
 }

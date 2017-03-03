@@ -34,12 +34,13 @@ public class ActivityDiverActions extends AppCompatActivity
     private MyDb myDb;
     private long personId;
     private long cardId;
-    private long cardLevel;
+    private int cardLevel;
+    private String cardSerialNumber = "";
 
     private int discount_;
-    private int sum_;
 
     private TextView personData;
+    private TextView cardSerialPrefix;
     private TextView cardSerial;
     private TextView discount;
     private TextView sum;
@@ -105,9 +106,10 @@ public class ActivityDiverActions extends AppCompatActivity
             int prefixIdx = cursor.getColumnIndex(MyDb.COL_PREFIX);
 
             cardId = cursor.getLong(idIdx);
-            String ser = cursor.getString(prefixIdx)+cursor.getString(serialIdx);
-            cardSerial.setText(ser);
-            cardLevel = cursor.getLong(levelIdx);
+            cardSerialPrefix.setText(cursor.getString(prefixIdx));
+            cardSerialNumber = cursor.getString(serialIdx);
+            cardSerial.setText(cardSerialNumber);
+            cardLevel = cursor.getInt(levelIdx);
             discount.setText(cursor.getString(discountIdx));
             discount_ = cursor.getInt(discountIdx);
         } else {
@@ -118,11 +120,12 @@ public class ActivityDiverActions extends AppCompatActivity
     }
 
     private void initViews() {
-        personData =    (TextView)findViewById(R.id.tv_person_data);
-        cardSerial =    (TextView)findViewById(R.id.tv_card_serial);
-        discount =      (TextView)findViewById(R.id.tv_discount);
-        sum =           (TextView)findViewById(R.id.tv_grand_total);
-        purchaseList =  (ListView)findViewById(R.id.lv_purchase_list);
+        personData = (TextView) findViewById(R.id.tv_person_data);
+        cardSerialPrefix = (TextView) findViewById(R.id.tv_prefix);
+        cardSerial = (TextView) findViewById(R.id.tv_card_serial);
+        discount = (TextView) findViewById(R.id.tv_discount);
+        sum = (TextView) findViewById(R.id.tv_grand_total);
+        purchaseList = (ListView) findViewById(R.id.lv_purchase_list);
     }
 
     @Override
@@ -157,7 +160,6 @@ public class ActivityDiverActions extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-//    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -189,6 +191,22 @@ public class ActivityDiverActions extends AppCompatActivity
         final RadioButton rbGold = (RadioButton)v.findViewById(R.id.rb_gold);
         final RadioButton rbSilver = (RadioButton)v.findViewById(R.id.rb_silver);
         final RadioButton rbYellow = (RadioButton)v.findViewById(R.id.rb_yellow);
+
+        if (!cardSerialNumber.isEmpty())
+            etSerial.setText(cardSerialNumber);
+        switch (cardLevel) {
+            case 1:
+                rbYellow.setChecked(true);
+                break;
+            case 2:
+                rbSilver.setChecked(true);
+                break;
+            case 3:
+                rbGold.setChecked(true);
+                break;
+            default:
+        }
+
         builder.setNegativeButton(R.string.button_cancel, null);
         builder.setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
             @Override
@@ -199,6 +217,11 @@ public class ActivityDiverActions extends AppCompatActivity
                 else if (rbSilver.isChecked()) level = 2;
                 else if (rbGold.isChecked()) level = 3;
                 if (!serial.isEmpty() && level!=0){
+                    if (cardId != 0) {
+                        if (myDb.updateCard(serial, level, cardId))
+                            fillCardData();
+                        return;
+                    }
                     long id = myDb.addCard(serial, personId, level);
                     if (id!=-1){
                         fillCardData();
@@ -225,7 +248,7 @@ public class ActivityDiverActions extends AppCompatActivity
         purchaseAdapter.swapCursor(null);
     }
 
-    static class PurchaseCursorLoader extends CursorLoader {
+    private static class PurchaseCursorLoader extends CursorLoader {
         MyDb db;
         long personId;
 
