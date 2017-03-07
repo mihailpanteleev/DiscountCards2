@@ -14,101 +14,100 @@
     tools:showIn="@layout/app_bar_activity_diver_actions">
 
     <TextView
-        android:text="Person data"
+        android:id="@+id/tv_person_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:id="@+id/tv_person_data" />
+        android:text="@string/person_data" />
 
     <TextView
-        android:text="Card Serial"
+        android:id="@+id/label_card_serial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_person_data"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/label_card_serial" />
+        android:layout_below="@+id/tv_person_data"
+        android:text="@string/card_serial" />
 
     <TextView
-        android:text="pre"
         android:id="@+id/tv_prefix"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_person_data"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:layout_toRightOf="@+id/label_card_serial"
-        android:layout_toEndOf="@+id/label_card_serial" />
+        android:layout_toEndOf="@+id/label_card_serial"
+        android:layout_toRightOf="@+id/label_card_serial" />
 
     <TextView
-        android:text="Serial"
+        android:id="@+id/tv_card_serial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_person_data"
-        android:layout_toRightOf="@+id/tv_prefix"
         android:layout_toEndOf="@+id/tv_prefix"
-        android:id="@+id/tv_card_serial" />
+        android:layout_toRightOf="@+id/tv_prefix"
+        android:text="@string/serial" />
 
     <TextView
-        android:text="Discount value, %"
+        android:id="@+id/label_discount_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/label_card_serial"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/label_discount_value" />
+        android:layout_below="@+id/label_card_serial"
+        android:text="@string/discount_value" />
 
     <TextView
-        android:text="Value"
+        android:id="@+id/tv_discount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_card_serial"
-        android:layout_toRightOf="@+id/label_discount_value"
-        android:layout_toEndOf="@+id/label_discount_value"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:id="@+id/tv_discount" />
+        android:layout_toEndOf="@+id/label_discount_value"
+        android:layout_toRightOf="@+id/label_discount_value"
+        android:text="@string/value" />
 
     <TextView
-        android:text="Grand total"
+        android:id="@+id/label_grand_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/label_discount_value"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/label_grand_total" />
+        android:layout_below="@+id/label_discount_value"
+        android:text="@string/grand_total" />
 
     <TextView
-        android:text="Sum"
+        android:id="@+id/tv_grand_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/label_grand_total"
-        android:layout_toRightOf="@+id/label_grand_total"
-        android:layout_toEndOf="@+id/label_grand_total"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:id="@+id/tv_grand_total" />
+        android:layout_toEndOf="@+id/label_grand_total"
+        android:layout_toRightOf="@+id/label_grand_total"
+        android:text="@string/sum" />
 
     <TextView
-        android:text="Purchase List"
+        android:id="@+id/label_purchase_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_grand_total"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:id="@+id/label_purchase_list" />
+        android:layout_marginTop="16dp"
+        android:text="@string/purchase_list" />
 
     <ListView
+        android:id="@+id/lv_purchase_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/label_purchase_list"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/lv_purchase_list"
-        android:headerDividersEnabled="false"
-        android:footerDividersEnabled="false" />
+        android:layout_below="@+id/label_purchase_list"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false" />
 
 </RelativeLayout>

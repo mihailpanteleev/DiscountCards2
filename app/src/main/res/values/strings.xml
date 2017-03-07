@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DiscountCards</string>
+    <string name="app_name">Discount System</string>
     <string name="menu_item_add_person">Add person</string>
     <string name="button_ok">OK</string>
     <string name="button_cancel">Cancel</string>
@@ -7,11 +7,43 @@
     <string name="name">Name</string>
     <string name="last_name">Last name</string>
     <string name="birth_date">Year of birth</string>
-    <string name="title_activity_diver_actions">ActivityDiverActions</string>
+    <string name="title_activity_diver_actions">Actions</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_buy">ActivityBuy</string>
+    <string name="title_activity_buy">Buy</string>
+
+    <string name="person_data">Person data</string>
+    <string name="card_serial">Card Serial</string>
+    <string name="serial">Serial</string>
+    <string name="discount_value">Discount value, %</string>
+    <string name="value">Value</string>
+    <string name="grand_total">Grand total</string>
+    <string name="sum">Sum</string>
+    <string name="purchase_list">Purchase List</string>
+
+    <string name="clients">Clients</string>
+
+    <string name="course_or_equipment">course/equipment</string>
+    <string name="price">Price</string>
+    <string name="quantity">Quantity</string>
+    <string name="discounted_price">Discounted price:</string>
+    <string name="buy">Buy</string>
+
+    <string name="discount_card_serial_number">Discount card serial number</string>
+
+    <string name="gold">Gold</string>
+    <string name="silver">Silver</string>
+    <string name="yellow">Yellow</string>
+
+    <string name="item">Item</string>
+    <string name="paid">Paid</string>
+    <string name="q_ty">Q-ty</string>
+
+    <string name="email">diveacademy@mail.ru</string>
+
+    <string name="edit_card">Edit Card</string>
+
 </resources>

@@ -3,10 +3,12 @@
 
     <item
         android:id="@+id/nav_edit_card"
-        android:title="Edit Card" />
+        android:icon="@drawable/ic_edit_card"
+        android:title="@string/edit_card" />
     <item
         android:id="@+id/nav_buy"
-        android:title="Buy" />
+        android:icon="@drawable/ic_shop_black_24dp"
+        android:title="@string/buy" />
 
 <!--
     <group android:checkableBehavior="single">

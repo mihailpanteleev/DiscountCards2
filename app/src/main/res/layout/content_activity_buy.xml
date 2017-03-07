@@ -14,95 +14,95 @@
     tools:showIn="@layout/activity_buy">
 
     <TextView
-        android:text="Person data"
+        android:id="@+id/tv_person_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        android:id="@+id/tv_person_data" />
+        android:text="@string/person_data" />
 
     <TextView
-        android:text="Discount value, %"
+        android:id="@+id/label_discount_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_person_data"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/label_discount_value" />
+        android:layout_below="@+id/tv_person_data"
+        android:text="@string/discount_value" />
 
     <TextView
-        android:text="Value"
+        android:id="@+id/tv_discount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_person_data"
-        android:layout_toRightOf="@+id/label_discount_value"
-        android:layout_toEndOf="@+id/label_discount_value"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:id="@+id/tv_discount" />
+        android:layout_toEndOf="@+id/label_discount_value"
+        android:layout_toRightOf="@+id/label_discount_value"
+        android:text="@string/value" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/label_discount_value"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/et_name"
-        android:hint="course/equipment" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:layout_below="@+id/et_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/label_discount_value"
+        android:ems="10"
+        android:hint="@string/course_or_equipment"
+        android:inputType="textPersonName" />
+
+    <EditText
         android:id="@+id/et_price"
-        android:hint="Price" />
-
-    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:layout_below="@+id/et_price"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/et_name"
+        android:ems="10"
+        android:hint="@string/price"
+        android:inputType="numberDecimal" />
+
+    <EditText
         android:id="@+id/et_quantity"
-        android:hint="Quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/et_price"
+        android:ems="10"
+        android:hint="@string/quantity"
+        android:inputType="number"
         android:text="1" />
 
     <TextView
-        android:text="Discounted price:"
+        android:id="@+id/label_discounted_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/et_quantity"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/label_discounted_price" />
+        android:layout_below="@+id/et_quantity"
+        android:text="@string/discounted_price" />
 
     <TextView
-        android:text="0"
+        android:id="@+id/tv_discounted"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_quantity"
-        android:layout_toRightOf="@+id/label_discounted_price"
-        android:layout_toEndOf="@+id/label_discounted_price"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
-        android:id="@+id/tv_discounted" />
+        android:layout_toEndOf="@+id/label_discounted_price"
+        android:layout_toRightOf="@+id/label_discounted_price"
+        android:text="0" />
 
     <Button
-        android:text="Buy"
+        android:id="@+id/buy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/buy"
-        android:onClick="processBuy"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="processBuy"
+        android:text="@string/buy" />
 
 </RelativeLayout>
